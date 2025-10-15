@@ -14,43 +14,7 @@ FastAPI backend + Streamlit frontend using Hugging Face `facebook/bart-large-cnn
 - newspaper3k, BeautifulSoup4, lxml
 - Streamlit UI
 
-## Setup
-```bash
-# 1) Create venv
-python -m venv .venv
-# Windows PowerShell
-. .venv\Scripts\Activate.ps1
 
-# 2) Install deps
-pip install -r requirements.txt
-```
-
-## Run Backend (FastAPI)
-```bash
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-# Health check: http://localhost:8000/health
-```
-
-## Run Frontend (Streamlit)
-```bash
-# Optional: configure API URL (defaults to http://localhost:8000)
-# In .streamlit/secrets.toml add:
-# API_URL = "http://localhost:8000"
-
-streamlit run frontend/streamlit_app.py
-```
-
-## API Usage
-```bash
-curl -X POST http://localhost:8000/summarize/ \
-  -H "Content-Type: application/json" \
-  -d '{"text": "<your long article text here>"}'
-```
-
-```bash
-curl -X POST http://localhost:8000/summarize/ \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://example.com/news/article"}'
 ```
 
 ## Notes
