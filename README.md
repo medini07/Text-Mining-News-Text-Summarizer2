@@ -1,43 +1,61 @@
-# Text-Mining-News-Text-Summarizer2
-Overview
+# News Article Summarizer
 
-The News Article Text Summarizer is a text mining application that automatically generates concise summaries of lengthy news articles. It uses Natural Language Processing (NLP) techniques to extract the most relevant sentences or phrases, allowing users to quickly understand the key points of an article.
+FastAPI backend + Streamlit frontend using Hugging Face `facebook/bart-large-cnn` to summarize news articles from raw text or URL (with `newspaper3k` / BeautifulSoup extraction).
 
-Features
+## Features
+- Summarize raw text or fetch article by URL
+- Input length capped (~4000 chars)
+- Short text guard (<100 chars)
+- Modular services for extraction and summarization
 
-Summarizes news articles from either a URL or direct text input.
+## Tech Stack
+- FastAPI, Uvicorn
+- Transformers (BART), PyTorch
+- newspaper3k, BeautifulSoup4, lxml
+- Streamlit UI
 
-Implements extractive or transformer-based summarization techniques.
+## Setup
+```bash
+# 1) Create venv
+python -m venv .venv
+# Windows PowerShell
+. .venv\Scripts\Activate.ps1
 
-Cleans and preprocesses text by removing noise, stopwords, and irrelevant content.
+# 2) Install deps
+pip install -r requirements.txt
+```
 
-Produces coherent summaries in seconds.
+## Run Backend (FastAPI)
+```bash
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+# Health check: http://localhost:8000/health
+```
 
-How It Works
+## Run Frontend (Streamlit)
+```bash
+# Optional: configure API URL (defaults to http://localhost:8000)
+# In .streamlit/secrets.toml add:
+# API_URL = "http://localhost:8000"
 
-The user provides a news article link or pastes article content.
+streamlit run frontend/streamlit_app.py
+```
 
-The system retrieves and preprocesses the text.
+## API Usage
+```bash
+curl -X POST http://localhost:8000/summarize/ \
+  -H "Content-Type: application/json" \
+  -d '{"text": "<your long article text here>"}'
+```
 
-Important sentences are ranked using NLP methods such as frequency analysis or pretrained transformer models.
+```bash
+curl -X POST http://localhost:8000/summarize/ \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com/news/article"}'
+```
 
-The top-ranked sentences are combined to form the final summary.
+## Notes
+- First run will download the `facebook/bart-large-cnn` model.
+- If `newspaper3k` fails to parse, the app falls back to BeautifulSoup paragraph extraction.
 
-Tech Stack
-
-Python
-
-pandas, nltk, spacy, gensim or transformers (depending on implementation)
-
-requests, BeautifulSoup (for URL text extraction)
-
-Usage
-
-Install dependencies from requirements.txt.
-
-Run the application:
-
-python main.py
-
-
-Enter a news article URL or paste text to generate a summary.
+---
+Generated via setup assistant.
